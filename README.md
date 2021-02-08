@@ -1,5 +1,6 @@
 
 
+
 <p align="center">
   <a href="https://tcno.co/">
     <img src="/img/banner.png"></a>
@@ -20,8 +21,9 @@
   <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/TcNobo/TcNo-Rust-Drop-Assistant?logo=GitHub&style=flat-square">
 </p>
                                                                                                                                   
-<p align="center"><a target="_blank" href="https://github.com/TcNobo/TcNo-Rust-Drop-Assistant/releases/latest">
-  <img alt="Download button" src="/img/btnDownload.png" height=70"></a></p>
+<p align="center"><a target="_blank" href="#">
+  <img alt="Download button" src="/img/btnDownloadChrome.png" height=70"></a><a target="_blank" href="https://addons.mozilla.org/en-US/firefox/addon/tcno-rda/">
+  <img alt="Download button" src="/img/btnDownloadFirefox.png" height=70"></a></p>
 
 
 Small open-source extension, extension to extend Twitch Drop and Rust (Facepunch) functionality.
