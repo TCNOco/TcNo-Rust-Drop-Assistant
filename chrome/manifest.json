@@ -28,11 +28,8 @@
     {
 	  "run_at" :"document_end",
       "matches": ["*://*.twitch.tv/drops/inventory*", "*://*.twitch.facepunch.com/*"],
-      "js": ["jquery-3.2.1.min.js", "inj.js"],
+      "js": ["inj.js"],
 	  "css": ["TcNo_snackbar.css"]
     }
-  ],
-  "storage": {
-    "managed_schema": "storage.json"
-  }
+  ]
 }
