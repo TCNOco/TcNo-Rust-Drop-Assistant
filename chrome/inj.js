@@ -10,7 +10,7 @@ View this project on GitHub: https://github.com/TcNobo/TcNo-Rust-Drop-Assistant
 */
 var storageProtocol = (window.chrome) ? chrome : browser;
 
-var console_info = ["%c TcNo Rust Drop Assistant %cby TechNobo (Wesley Pyburn) %chttps://tcno.co/ ", 'background: #222; color: white','background: #222; color: #bada55','background: #222; color: lightblue'];
+var console_info = ["%c TcNo RDA (TcNo Rust Drop Assistant) %cby TechNobo (Wesley Pyburn) %chttps://tcno.co/ ", 'background: #222; color: white','background: #222; color: #bada55','background: #222; color: lightblue'];
 console.log.apply(console, console_info);
 
 window.addEventListener('load', function () {
@@ -37,14 +37,14 @@ function addStylesheet(){
 	
 	var d = document.createElement('div');
 	d.id = "snackbar";
-	d.innerHTML = "TcNo Rust Drop Assistant Loaded!";
+	d.innerHTML = "TcNo RDA Loaded!";
 	(document.body).appendChild(d);
 }
 var fadeout;
 function callSnackbar(text, length = 3000) {
   var x = document.getElementById("snackbar");
   x.className = "show";
-  x.innerHTML = "<h1 class='title'>TcNo Rust Drop Assistant</h1><span>"+text+"</span>";
+  x.innerHTML = "<h1 class='title'><svg width='0.72em' height='0.72em' viewBox='0 0 240 322' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' xml:space='preserve' xmlns:serif='http://www.serif.com/' style='fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;'><rect id='font_TCNO' x='0' y='0' width='240' height='321.6' style='fill:none;'/><clipPath id='_clip1'><rect x='0' y='0' width='240' height='321.6'/></clipPath><g clip-path='url(#_clip1)'><path d='M-0,145.566l-0,160.801l37.346,-0l-0,-67.666l78.868,82.899l0,-160.8l-37.349,-0l0,67.691l-78.865,-82.925Zm129.753,131.249l28.436,29.551l-28.436,0l-0,-29.551Zm-0,-20.586l-0,-95.429l110.247,-0l-0,145.566l-62.001,0l-48.246,-50.137Zm72.797,-58.08l-35.347,-0l-0,70.868l35.347,0l-0,-70.868Zm-171.496,-37.349l34.068,35.545l0,-35.545l-34.068,-0Zm98.699,-160.8l-0,146.413l110.247,-0l-0,-36.381l-72.919,0l-0,-71.957l72.919,-0l-0,-38.075l-110.247,-0Zm-129.753,-0l-0,37.268l39.322,0l-0,109.145l37.314,-0l-0,-109.145l39.72,-0l0,-37.268l-116.356,-0Z' style='fill:#9146ff;'/></g></svg> Rust Drop Assistant</h1><span>"+text+"</span>";
   clearTimeout(fadeout);
   fadeout = setTimeout(()=>{ x.className = "show fadeout"; setTimeout(()=>{x.className = x.className = "";}, 500); }, length);
 }

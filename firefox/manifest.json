@@ -19,7 +19,7 @@
   "web_accessible_resources": [
     "TcNoEmbed.js"
   ],
-   "permissions": ["tabs", "storage", "*://*.twitch.tv/drops/*", "*://*.twitch.facepunch.com/*"],
+   "permissions": ["storage", "*://*.twitch.tv/drops/*", "*://*.twitch.facepunch.com/*"],
    "content_scripts": [
     {
       "run_at" :"document_end",
