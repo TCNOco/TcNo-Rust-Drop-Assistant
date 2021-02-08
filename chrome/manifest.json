@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "TcNo Rust Twitch Drop Assistant",
   "description": "An easy way to view available twitch drops for Rust",
-  "version": "0.1",
+  "version": "1.0",
   "homepage_url": "https://tcno.co/",
 
   "browser_action": {
