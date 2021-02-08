@@ -32,10 +32,12 @@ If you collect all the drops, you will find this extension very useful.
 
 ### How does it work?
 After visiting (or clicking the popup - which will open and shortly after close) the [Twitch Drops Inventory](https://www.twitch.tv/drops/inventory) page, the plugin will collect claimed items. Visiting the arguably more useful [Facepunch Twitch](https://twitch.facepunch.com/) page will have the already collected drops highlighted.
+
 **By default Twitch provides**:
--- An easy way to track claimed items & see all streamers with drops
+- An easy way to track claimed items & see all streamers with drops
+
 **and Facepunch's Twitch website provides**:
--- An easy way to track which with drops streamers are live & (an easier way to) see all streamers with drops
+- An easy way to track which with drops streamers are live & (an easier way to) see all streamers with drops
 ### This extension brings them together
 
 ### Screenshots:
