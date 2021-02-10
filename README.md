@@ -1,11 +1,12 @@
 
 
+
 <p align="center">
   <a href="https://tcno.co/">
     <img src="/img/banner.png"></a>
 </p>
 <p align="center">
- <a href="#">
+ <a href="https://chrome.google.com/webstore/detail/tcno-rust-twitch-drop-ass/hflmhkgipblnfcplmdlkcknmenjmnedp">
     <img alt="Chrome Web Store" src="https://img.shields.io/chrome-web-store/users/hflmhkgipblnfcplmdlkcknmenjmnedp?logo=google%20chrome&logoColor=white&style=flat-square"></a>
  <a href="https://addons.mozilla.org/en-US/firefox/addon/tcno-rda/">
     <img alt="Mozilla Add-on" src="https://img.shields.io/amo/users/tcno-rda?logo=firefox%20browser&style=flat-square"></a>
@@ -20,8 +21,9 @@
   <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/TcNobo/TcNo-Rust-Drop-Assistant?logo=GitHub&style=flat-square">
 </p>
                                                                                                                                   
-<p align="center"><a target="_blank" href="https://github.com/TcNobo/TcNo-Rust-Drop-Assistant/releases/latest">
-  <img alt="Download button" src="/img/btnDownload.png" height=70"></a></p>
+<p align="center"><a target="_blank" href="https://chrome.google.com/webstore/detail/tcno-rust-twitch-drop-ass/hflmhkgipblnfcplmdlkcknmenjmnedp">
+  <img alt="Download button" src="/img/btnDownloadChrome.png" height=70"></a><a target="_blank" href="https://addons.mozilla.org/en-US/firefox/addon/tcno-rda/">
+  <img alt="Download button" src="/img/btnDownloadFirefox.png" height=70"></a></p>
 
 
 Small open-source extension, extension to extend Twitch Drop and Rust (Facepunch) functionality.
@@ -30,10 +32,12 @@ If you collect all the drops, you will find this extension very useful.
 
 ### How does it work?
 After visiting (or clicking the popup - which will open and shortly after close) the [Twitch Drops Inventory](https://www.twitch.tv/drops/inventory) page, the plugin will collect claimed items. Visiting the arguably more useful [Facepunch Twitch](https://twitch.facepunch.com/) page will have the already collected drops highlighted.
+
 **By default Twitch provides**:
--- An easy way to track claimed items & see all streamers with drops
+- An easy way to track claimed items & see all streamers with drops
+
 **and Facepunch's Twitch website provides**:
--- An easy way to track which with drops streamers are live & (an easier way to) see all streamers with drops
+- An easy way to track which with drops streamers are live & (an easier way to) see all streamers with drops
 ### This extension brings them together
 
 ### Screenshots:
