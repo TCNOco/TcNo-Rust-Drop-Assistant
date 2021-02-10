@@ -1,9 +1,9 @@
 {
   "manifest_version": 2,
-  "name": "TcNo Rust Twitch Drop Assistant",
+  "name": "TcNo Rust Drop Assistant",
   "author": "Wesley Pyburn",
   "description": "An easy way to view available twitch drops for Rust",
-  "version": "1.0",
+  "version": "1.1",
   "homepage_url": "https://tcno.co/",
 
   "browser_action": {
