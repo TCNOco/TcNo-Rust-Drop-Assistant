@@ -118,7 +118,7 @@ async function TcNo_RDA_Fp(){
 			var eIncomplete = [];
 			[].forEach.call(document.getElementsByClassName("drop-item__title"), (el)=>{
 				if (claimedItems.includes(escape(el.innerHTML.toLowerCase()))){ // Element is an item that has been recieved.
-					el.parentElement.setAttribute("style", "background-color:#090E00;outline-offset: -6px;outline:solid 1px #718F41");
+					el.parentElement.setAttribute("style", "background-color:#090E00;outline-offset: -6px;outline:solid 1px #718F41;padding:16px");
 					
 					// If the item does not belong to the second list of items, and is a streamer drop, not a Twitch drop:
 					if (el.parentElement.parentElement.parentElement.classList.contains('streamer'))
@@ -128,6 +128,15 @@ async function TcNo_RDA_Fp(){
 						eIncomplete.push(el.parentElement);
 				}
 			});
+			
+			var style = (function() {
+				var style = document.createElement("style");
+				style.appendChild(document.createTextNode(""));
+				document.head.appendChild(style);
+				return style;
+			})();
+			style.sheet.insertRule('.drop-item{padding: 16px;}', 0);
+			style.sheet.insertRule('video{-webkit-box-shadow: 0px 0px 6px 3px rgba(0,0,0,0.75);-moz-box-shadow: 0px 0px 6px 3px rgba(0,0,0,0.75);box-shadow: 0px 0px 6px 3px rgba(0,0,0,0.75);}', 0);
 			
 			// Rearrange:
 			var rowCount = 0;
