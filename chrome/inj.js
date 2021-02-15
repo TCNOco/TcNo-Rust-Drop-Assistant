@@ -25,16 +25,24 @@ window.addEventListener('load', function () {
 		TcNo_RDA_Fp();
 	}
 });
+var style = (function() {
+	var style = document.createElement("style");
+	style.appendChild(document.createTextNode(""));
+	document.head.appendChild(style);
+	return style;
+})();
 function addStylesheet(){
-	var s = document.createElement('link');
-	s.type = "text/css";
-	s.rel = "stylesheet";
-	s.href = chrome.extension.getURL('TcNo_snackbar.css');
-	s.onload = function() {
-		this.remove();
-	};
-	(document.head || document.documentElement).appendChild(s);
+	var css = document.createElement('style'); 
+	css.type = 'text/css'; 
+  
+	var snackbar_styles =`#snackbar{visibility:hidden;min-width:250px;background-color:#230B16;color:#fff;text-align:center;border:solid 4px #DE2A2A;padding:16px;position:fixed;z-index:1;left:50%;transform:translateX(-50%);bottom:30px;-webkit-box-shadow: 0px 0px 20px 5px #230B16;-moz-box-shadow: 0px 0px 20px 5px #230B16;box-shadow: 0px 0px 20px 5px #230B16;}#snackbar.show{visibility:visible;-webkit-animation:fadein 0.5s,fadeout .5s 2.5s;animation:fadein 0.5s}#snackbar.fadeout{bottom:0;opacity:0;animation:fadeout .5s 0s}@-webkit-keyframes fadein{from{bottom:0;opacity:0}to{bottom:30px;opacity:1}}@keyframes fadein{from{bottom:0;opacity:0}to{bottom:30px;opacity:1}}@-webkit-keyframes fadeout{from{bottom:30px;opacity:1}to{bottom:0;opacity:0}}@keyframes fadeout{from{bottom:30px;opacity:1}to{bottom:0;opacity:0}}#snackbar h1{color:#9146ff;font-size:2em}#snackbar span{color:#efebe0;font-size:1.3em}#snackbar a{color:#aa4734!important;font-size:1.5em;text-decoration:underline}`;
 	
+	if (css.styleSheet)  
+		css.styleSheet.cssText = snackbar_styles;
+	else  
+		css.appendChild(document.createTextNode(snackbar_styles));
+	document.getElementsByTagName("head")[0].appendChild(css); 
+				
 	var d = document.createElement('div');
 	d.id = "snackbar";
 	d.innerHTML = "TcNo RDA Loaded!";
@@ -178,12 +186,6 @@ async function TcNo_RDA_Fp(){
 				}
 			});
 			
-			var style = (function() {
-				var style = document.createElement("style");
-				style.appendChild(document.createTextNode(""));
-				document.head.appendChild(style);
-				return style;
-			})();
 			style.sheet.insertRule('.drop-item{padding: 16px;}', 0);
 			style.sheet.insertRule('.ProgressBar{width: 100%;height: .5rem;background-color:#222;margin-top:0.5rem}', 0);
 			style.sheet.insertRule('.ProgressBar div{height: .25rem;background-color:#9147ff;}', 0);
