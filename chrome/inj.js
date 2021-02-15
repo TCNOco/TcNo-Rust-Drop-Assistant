@@ -59,12 +59,28 @@ async function TcNo_RDA_Twitch(){
 			[].forEach.call(claimedItemList.querySelectorAll('.tw-semibold'), (el)=>{claimedItems.push(escape(el.innerHTML.toLowerCase()))});
 			if (claimedItems.length <= 1)throw '';
 			
-			await storageProtocol.storage.local.set({claimedItems: claimedItems.join(","), lastChecked: new Date().toString()});
 			
+			// Get progress
+			var progressItemList = document.querySelector('[data-test-selector=DropsCampaignsInProgressPresentation-main-layout]').getElementsByClassName("tw-mg-t-2");
+			[].forEach.call(progressItemList, (el)=>{
+				if (el.querySelector('[data-test-selector=DropsCampaignInProgressRewardPresentation-claim-button]') !== null){ // THIS ITEM HAS A CLAIM Button
+					//console.log(escape(el.querySelectorAll('.tw-semibold')[0].innerHTML.toLowerCase()) + "||100"); // Eg. buddha%20mask||100 == Claim button visible
+					claimedItems.push(escape(el.querySelectorAll('.tw-semibold')[0].innerHTML.toLowerCase()) + "||100"); // Eg. buddha%20mask||100 == Claim button visible
+				}else if (el.querySelector('[role=progressbar]') !== null){
+					var val = el.querySelector('[role=progressbar]').attributes["aria-valuenow"].value;
+					if (val != 0){
+					//console.log(escape(el.querySelectorAll('.tw-semibold')[0].innerHTML.toLowerCase()) + "||" + el.querySelector('[role=progressbar]').attributes["aria-valuenow"].value);
+					claimedItems.push(escape(el.querySelectorAll('.tw-semibold')[0].innerHTML.toLowerCase()) + "||" + el.querySelector('[role=progressbar]').attributes["aria-valuenow"].value);
+					}
+				}
+			});
+			
+			
+			await storageProtocol.storage.local.set({claimedItems: claimedItems.join(","), lastChecked: new Date().toString()});
 			console.log("Saved info to claimedItems in chrome.storage.local");
 			console.log(claimedItems);
-			callSnackbar("Saved claimed items");
 			
+			callSnackbar("Saved claimed items");
 			init_timeout = 10; // Success
 			
 			if (window.location.href.indexOf("TcNo_update" > -1))window.close();
@@ -103,6 +119,8 @@ async function TcNo_RDA_Fp(){
 	var init_timeout = 0;
 	
 	claimedItems = await getData_Chrome('claimedItems');
+	claimedItems = claimedItems.split(",");
+	var items_Progess = []; 
 	var lc = await getData_Chrome('lastChecked');
 	console.log("Last checked: " + lc);
 	
@@ -112,17 +130,48 @@ async function TcNo_RDA_Fp(){
 	
 	callSnackbar("Time since last check: " + timeSince+"<br><p style='margin:0;font-size:0.6em'>Last check: " + lc + "</p><a target='_blank' href='https://www.twitch.tv/drops/inventory?TcNo_update'>Update now</a>", 7500);
 	
+	// Move items with progress into a new list, clean it up for the next loop
+	//console.log(claimedItems);
+	for (i = 0; i < claimedItems.length; ++i) {
+		var claimedItem = claimedItems[i];
+		if (claimedItem.indexOf("||") != -1){items_Progess.push(claimedItem);}
+		claimedItems[i] = claimedItem.split("||")[0];
+	}
+		
 	while (init_timeout < 10){
 		try{
 			var eComplete = [];
 			var eIncomplete = [];
 			[].forEach.call(document.getElementsByClassName("drop-item__title"), (el)=>{
-				if (claimedItems.includes(escape(el.innerHTML.toLowerCase()))){ // Element is an item that has been recieved.
+				var currentItemName = escape(el.innerHTML.toLowerCase());
+				// Alternative item names included here. Will add as time goes on...
+				var altItemName = "";
+				if (currentItemName.indexOf("metal%20facemask")!=-1){
+					altItemName = currentItemName.replace("metal%20facemask", "mask")
+				}
+				if (claimedItems.includes(currentItemName) || (altItemName != "" && claimedItems.includes(altItemName))){ // Element is an item that has been recieved.
 					el.parentElement.setAttribute("style", "background-color:#090E00;outline-offset: -6px;outline:solid 1px #718F41;padding:16px");
 					
 					// If the item does not belong to the second list of items, and is a streamer drop, not a Twitch drop:
 					if (el.parentElement.parentElement.parentElement.classList.contains('streamer'))
 						eComplete.push(el.parentElement);
+						
+					// If item has progression, show the bar
+					[].forEach.call(items_Progess, (item)=>{
+						if (item.indexOf(currentItemName) != -1 || (altItemName != "" && item.indexOf(altItemName) != -1)){
+							var progress = (item.indexOf("||") != -1 ? item.split("||")[1] : 100);
+							var cln = el.parentElement.getElementsByClassName("drop-item__subtitle")[0].cloneNode(true);
+							var prog = document.createElement("div");
+							prog.className = "ProgressBar";
+							var prog_inner = document.createElement("div");
+							prog_inner.style.cssText = "width:" + progress + "%";
+							prog.appendChild(prog_inner);
+							el.parentElement.getElementsByClassName("drop-item__subtitle")[0].appendChild(prog);
+							el.parentElement.getElementsByClassName("drop-item__subtitle")[0].querySelector("span").innerHTML += " (" + progress + "%)";
+							
+							el.parentElement.setAttribute("style", "background-color:#1f0021;outline-offset: -6px;outline:dashed 1px #8b418f;padding:16px;");
+						}
+					});
 				}else{
 					if (el.parentElement.parentElement.parentElement.classList.contains('streamer'))
 						eIncomplete.push(el.parentElement);
@@ -136,6 +185,8 @@ async function TcNo_RDA_Fp(){
 				return style;
 			})();
 			style.sheet.insertRule('.drop-item{padding: 16px;}', 0);
+			style.sheet.insertRule('.ProgressBar{width: 100%;height: .5rem;background-color:#222;margin-top:0.5rem}', 0);
+			style.sheet.insertRule('.ProgressBar div{height: .25rem;background-color:#9147ff;}', 0);
 			style.sheet.insertRule('video{-webkit-box-shadow: 0px 0px 6px 3px rgba(0,0,0,0.75);-moz-box-shadow: 0px 0px 6px 3px rgba(0,0,0,0.75);box-shadow: 0px 0px 6px 3px rgba(0,0,0,0.75);}', 0);
 			
 			// Rearrange:
@@ -159,7 +210,8 @@ async function TcNo_RDA_Fp(){
 			
 			
 			init_timeout = 10;
-		}catch{
+		}catch(e){
+			console.log(e);
 			init_timeout++;
 			await new Promise(r => setTimeout(r, 2000));
 		}

@@ -42,7 +42,10 @@ After visiting (or clicking the popup - which will open and shortly after close)
 
 ### Screenshots:
 <p>
+  <img alt="Facepunch's website (Comparison)" src="/img/1.3-item_progress.png">
+  <hr>
   <img alt="Facepunch's website (Comparison)" src="/img/Facepunch_Screenshot.png">
+  <hr>
   <img alt="Twitch's Drops Inventory page" src="/img/Twitch_Screenshot.png">
 </p>
 
