@@ -149,6 +149,7 @@ async function TcNo_RDA_Fp(){
 	while (init_timeout < 10){
 		try{
 			var eComplete = [];
+			var ePartial = [];
 			var eIncomplete = [];
 			[].forEach.call(document.getElementsByClassName("drop-item__title"), (el)=>{
 				var currentItemName = escape(el.innerHTML.toLowerCase());
@@ -160,9 +161,7 @@ async function TcNo_RDA_Fp(){
 				if (claimedItems.includes(currentItemName) || (altItemName != "" && claimedItems.includes(altItemName))){ // Element is an item that has been recieved.
 					el.parentElement.setAttribute("style", "background-color:#090E00;outline-offset: -6px;outline:solid 1px #718F41;padding:16px");
 					
-					// If the item does not belong to the second list of items, and is a streamer drop, not a Twitch drop:
-					if (el.parentElement.parentElement.parentElement.classList.contains('streamer'))
-						eComplete.push(el.parentElement);
+					var hasSomeProgression = false;
 						
 					// If item has progression, show the bar
 					[].forEach.call(items_Progess, (item)=>{
@@ -178,8 +177,16 @@ async function TcNo_RDA_Fp(){
 							el.parentElement.getElementsByClassName("drop-item__subtitle")[0].querySelector("span").innerHTML += " (" + progress + "%)";
 							
 							el.parentElement.setAttribute("style", "background-color:#1f0021;outline-offset: -6px;outline:dashed 1px #8b418f;padding:16px;");
+							hasSomeProgression = true;
 						}
 					});
+					
+					// If the item does not belong to the second list of items, and is a streamer drop, not a Twitch drop:
+					if (el.parentElement.parentElement.parentElement.classList.contains('streamer')){
+						console.log(el.parentElement);
+						if (hasSomeProgression) ePartial.push(el.parentElement);
+						else eComplete.push(el.parentElement);
+					}
 				}else{
 					if (el.parentElement.parentElement.parentElement.classList.contains('streamer'))
 						eIncomplete.push(el.parentElement);
@@ -200,6 +207,9 @@ async function TcNo_RDA_Fp(){
 						if (eIncomplete.length > 0){
 							row.appendChild(eIncomplete[0]);
 							eIncomplete.shift();
+						}else if (ePartial.length > 0){
+							row.appendChild(ePartial[0]);
+							ePartial.shift();
 						}else if (eComplete.length > 0){
 							row.appendChild(eComplete[0]);
 							eComplete.shift();
