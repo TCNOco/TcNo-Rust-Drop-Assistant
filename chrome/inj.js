@@ -195,7 +195,7 @@ async function TcNo_RDA_Fp(){
 					
 					// If the item does not belong to the second list of items, and is a streamer drop, not a Twitch drop:
 					if (drop_table.classList.contains('streamer')){
-						console.log(drop);
+						//console.log(drop);
 						if (hasSomeProgression) ePartial.push(drop);
 						else eComplete.push(drop);
 					}
@@ -217,15 +217,15 @@ async function TcNo_RDA_Fp(){
 					//console.log(i);
 					if (rowcount < 4){
 						if (eIncomplete.length > 0){
-							console.log(eIncomplete[0]);
+							//console.log(eIncomplete[0]);
 							row.appendChild(eIncomplete[0]);
 							eIncomplete.shift();
 						}else if (ePartial.length > 0){
-							console.log(ePartial[0]);
+							//console.log(ePartial[0]);
 							row.appendChild(ePartial[0]);
 							ePartial.shift();
 						}else if (eComplete.length > 0){
-							console.log(eComplete[0]);
+							//console.log(eComplete[0]);
 							row.appendChild(eComplete[0]);
 							eComplete.shift();
 						}
