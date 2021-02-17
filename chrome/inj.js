@@ -148,18 +148,30 @@ async function TcNo_RDA_Fp(){
 		
 	while (init_timeout < 10){
 		try{
+			// Change max width of the container for new width
+			style.sheet.insertRule('.container{max-width: 1220px;}', 0);
+			style.sheet.insertRule('.drop-footer{width: 100%;}', 0);
+			style.sheet.insertRule('.drop-footer .time{width: 100%;text-align:center}', 0);
+			
 			var eComplete = [];
 			var ePartial = [];
 			var eIncomplete = [];
-			[].forEach.call(document.getElementsByClassName("drop-item__title"), (el)=>{
+			[].forEach.call(document.getElementsByClassName("title"), (el)=>{
+				if (el.tagName.toLowerCase() != "h3"){return;} // Only look at h3, which are the item titles.
+				
 				var currentItemName = escape(el.innerHTML.toLowerCase());
 				// Alternative item names included here. Will add as time goes on...
 				var altItemName = "";
 				if (currentItemName.indexOf("metal%20facemask")!=-1){
 					altItemName = currentItemName.replace("metal%20facemask", "mask")
 				}
+				
+				var drop_footer = el.parentElement;
+				var drop = drop_footer.parentElement;
+				var drop_table = drop_footer.parentElement.parentElement.parentElement;
+				
 				if (claimedItems.includes(currentItemName) || (altItemName != "" && claimedItems.includes(altItemName))){ // Element is an item that has been recieved.
-					el.parentElement.setAttribute("style", "background-color:#090E00;outline-offset: -6px;outline:solid 1px #718F41;padding:16px");
+					drop.setAttribute("style", "background-color:#090E00;outline-offset: -6px;outline:solid 1px #718F41;padding:16px;");
 					
 					var hasSomeProgression = false;
 						
@@ -167,29 +179,29 @@ async function TcNo_RDA_Fp(){
 					[].forEach.call(items_Progess, (item)=>{
 						if (item.indexOf(currentItemName) != -1 || (altItemName != "" && item.indexOf(altItemName) != -1)){
 							var progress = (item.indexOf("||") != -1 ? item.split("||")[1] : 100);
-							var cln = el.parentElement.getElementsByClassName("drop-item__subtitle")[0].cloneNode(true);
+							var cln = drop_footer.getElementsByClassName("time")[0].cloneNode(true);
 							var prog = document.createElement("div");
 							prog.className = "ProgressBar";
 							var prog_inner = document.createElement("div");
 							prog_inner.style.cssText = "width:" + progress + "%";
 							prog.appendChild(prog_inner);
-							el.parentElement.getElementsByClassName("drop-item__subtitle")[0].appendChild(prog);
-							el.parentElement.getElementsByClassName("drop-item__subtitle")[0].querySelector("span").innerHTML += " (" + progress + "%)";
+							drop_footer.getElementsByClassName("time")[0].appendChild(prog);
+							drop_footer.getElementsByClassName("time")[0].querySelector("span").innerHTML += " (" + progress + "%)";
 							
-							el.parentElement.setAttribute("style", "background-color:#1f0021;outline-offset: -6px;outline:dashed 1px #8b418f;padding:16px;");
+							drop.setAttribute("style", "background-color:#1f0021;outline-offset: -6px;outline:dashed 1px #8b418f;padding:16px;");
 							hasSomeProgression = true;
 						}
 					});
 					
 					// If the item does not belong to the second list of items, and is a streamer drop, not a Twitch drop:
-					if (el.parentElement.parentElement.parentElement.classList.contains('streamer')){
-						console.log(el.parentElement);
-						if (hasSomeProgression) ePartial.push(el.parentElement);
-						else eComplete.push(el.parentElement);
+					if (drop_table.classList.contains('streamer')){
+						console.log(drop);
+						if (hasSomeProgression) ePartial.push(drop);
+						else eComplete.push(drop);
 					}
 				}else{
-					if (el.parentElement.parentElement.parentElement.classList.contains('streamer'))
-						eIncomplete.push(el.parentElement);
+					if (drop_table.classList.contains('streamer'))
+						eIncomplete.push(el.drop);
 				}
 			});
 			
@@ -198,26 +210,29 @@ async function TcNo_RDA_Fp(){
 			style.sheet.insertRule('.ProgressBar div{height: .25rem;background-color:#9147ff;}', 0);
 			style.sheet.insertRule('video{-webkit-box-shadow: 0px 0px 6px 3px rgba(0,0,0,0.75);-moz-box-shadow: 0px 0px 6px 3px rgba(0,0,0,0.75);box-shadow: 0px 0px 6px 3px rgba(0,0,0,0.75);}', 0);
 			
-			// Rearrange:
-			var rowCount = 0;
-			[].forEach.call(document.getElementsByClassName('rust-drops__body'), (row)=>{
-				for (let i=0; i < 3; i++){
+			// rearrange:
+			var rowcount = 0;
+			[].forEach.call(document.getElementsByClassName("drop-container"), (row)=>{
+				for (let i=0; i < 4; i++){
 					//console.log(i);
-					if (rowCount < 3){
+					if (rowcount < 4){
 						if (eIncomplete.length > 0){
+							console.log(eIncomplete[0]);
 							row.appendChild(eIncomplete[0]);
 							eIncomplete.shift();
 						}else if (ePartial.length > 0){
+							console.log(ePartial[0]);
 							row.appendChild(ePartial[0]);
 							ePartial.shift();
 						}else if (eComplete.length > 0){
+							console.log(eComplete[0]);
 							row.appendChild(eComplete[0]);
 							eComplete.shift();
 						}
 					}
-					rowCount++;
+					rowcount++;
 				}
-				rowCount = 0;
+				rowcount = 0;
 			});
 			
 			
