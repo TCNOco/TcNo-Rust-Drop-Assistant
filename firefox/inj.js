@@ -64,7 +64,7 @@ async function TcNo_RDA_Twitch(){
 	while (init_timeout < 10){
 		try{
 			var claimedItemList = document.querySelector('[data-test-selector=drops-list__wrapper]').getElementsByClassName("tw-tower")[0];
-			[].forEach.call(claimedItemList.querySelectorAll('.tw-semibold'), (el)=>{claimedItems.push(escape(el.innerHTML.toLowerCase()))});
+			[].forEach.call(claimedItemList.querySelectorAll('.tw-semibold'), (el)=>{claimedItems.push(escape(el.innerHTML.toLowerCase().split(" ")[0]))});
 			if (claimedItems.length <= 1)throw '';
 			
 			
@@ -73,12 +73,12 @@ async function TcNo_RDA_Twitch(){
 			[].forEach.call(progressItemList, (el)=>{
 				if (el.querySelector('[data-test-selector=DropsCampaignInProgressRewardPresentation-claim-button]') !== null){ // THIS ITEM HAS A CLAIM Button
 					//console.log(escape(el.querySelectorAll('.tw-semibold')[0].innerHTML.toLowerCase()) + "||100"); // Eg. buddha%20mask||100 == Claim button visible
-					claimedItems.push(escape(el.querySelectorAll('.tw-semibold')[0].innerHTML.toLowerCase()) + "||100"); // Eg. buddha%20mask||100 == Claim button visible
+					claimedItems.push(escape(el.querySelectorAll('.tw-semibold')[0].innerHTML.toLowerCase().split(" ")[0]) + "||100"); // Eg. buddha%20mask||100 == Claim button visible
 				}else if (el.querySelector('[role=progressbar]') !== null){
 					var val = el.querySelector('[role=progressbar]').attributes["aria-valuenow"].value;
 					if (val != 0){
 					//console.log(escape(el.querySelectorAll('.tw-semibold')[0].innerHTML.toLowerCase()) + "||" + el.querySelector('[role=progressbar]').attributes["aria-valuenow"].value);
-					claimedItems.push(escape(el.querySelectorAll('.tw-semibold')[0].innerHTML.toLowerCase()) + "||" + el.querySelector('[role=progressbar]').attributes["aria-valuenow"].value);
+					claimedItems.push(escape(el.querySelectorAll('.tw-semibold')[0].innerHTML.toLowerCase().split(" ")[0]) + "||" + el.querySelector('[role=progressbar]').attributes["aria-valuenow"].value);
 					}
 				}
 			});
@@ -86,7 +86,7 @@ async function TcNo_RDA_Twitch(){
 			
 			await storageProtocol.storage.local.set({claimedItems: claimedItems.join(","), lastChecked: new Date().toString()});
 			console.log("Saved info to claimedItems in chrome.storage.local");
-			console.log(claimedItems);
+			//console.log(claimedItems);
 			
 			callSnackbar("Saved claimed items");
 			init_timeout = 10; // Success
@@ -130,7 +130,7 @@ async function TcNo_RDA_Fp(){
 	claimedItems = claimedItems.split(",");
 	var items_Progess = []; 
 	var lc = await getData_Chrome('lastChecked');
-	console.log("Last checked: " + lc);
+	//console.log("Last checked: " + lc);
 	
 	var lc_now = new Date().getTime();
 	var lc_d = Date.parse(lc);
@@ -151,57 +151,39 @@ async function TcNo_RDA_Fp(){
 			// Change max width of the container for new width
 			style.sheet.insertRule('.container{max-width: 1220px;}', 0);
 			style.sheet.insertRule('.drop-footer{width: 100%;}', 0);
-			style.sheet.insertRule('.drop-footer .time{width: 100%;text-align:center}', 0);
+			style.sheet.insertRule('.drop-footer .drop-time{width: 100%;text-align:center}', 0);
 			
-			var eComplete = [];
-			var ePartial = [];
-			var eIncomplete = [];
-			[].forEach.call(document.getElementsByClassName("title"), (el)=>{
-				if (el.tagName.toLowerCase() != "h3"){return;} // Only look at h3, which are the item titles.
+			[].forEach.call(document.getElementsByClassName("drop-name"), (el)=>{
+				el.parentElement.parentElement.setAttribute("progress","0");
 				
-				var currentItemName = escape(el.innerHTML.toLowerCase());
-				// Alternative item names included here. Will add as time goes on...
-				var altItemName = "";
-				if (currentItemName.indexOf("metal%20facemask")!=-1){
-					altItemName = currentItemName.replace("metal%20facemask", "mask")
-				}
 				
+				var currentItemName = escape(el.innerHTML.toLowerCase().split(" ")[0]); // Take only the first word
 				var drop_footer = el.parentElement;
 				var drop = drop_footer.parentElement;
-				var drop_table = drop_footer.parentElement.parentElement.parentElement;
+				var drop_table_section = drop_footer.parentElement.parentElement.parentElement.parentElement;
+				drop.setAttribute("style", "margin-bottom: 32px;");
 				
-				if (claimedItems.includes(currentItemName) || (altItemName != "" && claimedItems.includes(altItemName))){ // Element is an item that has been recieved.
-					drop.setAttribute("style", "background-color:#090E00;outline-offset: -6px;outline:solid 1px #718F41;padding:16px;");
-					
-					var hasSomeProgression = false;
-						
+				if (claimedItems.includes(currentItemName)){ // Element is an item that has been recieved.
+					drop.setAttribute("style", "background-color:#090E00;outline-offset: -6px;outline:solid 1px #718F41;padding:16px;margin-bottom: 32px;");
+					el.parentElement.parentElement.setAttribute("progress",101);
+											
 					// If item has progression, show the bar
 					[].forEach.call(items_Progess, (item)=>{
-						if (item.indexOf(currentItemName) != -1 || (altItemName != "" && item.indexOf(altItemName) != -1)){
+						if (item.indexOf(currentItemName) != -1){
 							var progress = (item.indexOf("||") != -1 ? item.split("||")[1] : 100);
-							var cln = drop_footer.getElementsByClassName("time")[0].cloneNode(true);
+							var cln = drop_footer.getElementsByClassName("drop-time")[0].cloneNode(true);
 							var prog = document.createElement("div");
 							prog.className = "ProgressBar";
 							var prog_inner = document.createElement("div");
 							prog_inner.style.cssText = "width:" + progress + "%";
+							el.parentElement.parentElement.setAttribute("progress",progress);
 							prog.appendChild(prog_inner);
-							drop_footer.getElementsByClassName("time")[0].appendChild(prog);
-							drop_footer.getElementsByClassName("time")[0].querySelector("span").innerHTML += " (" + progress + "%)";
+							drop_footer.getElementsByClassName("drop-time")[0].appendChild(prog);
+							drop_footer.getElementsByClassName("drop-time")[0].querySelector("span").innerHTML += " (" + progress + "%)";
 							
 							drop.setAttribute("style", "background-color:#1f0021;outline-offset: -6px;outline:dashed 1px #8b418f;padding:16px;");
-							hasSomeProgression = true;
 						}
 					});
-					
-					// If the item does not belong to the second list of items, and is a streamer drop, not a Twitch drop:
-					if (drop_table.classList.contains('streamer')){
-						//console.log(drop);
-						if (hasSomeProgression) ePartial.push(drop);
-						else eComplete.push(drop);
-					}
-				}else{
-					if (drop_table.classList.contains('streamer'))
-						eIncomplete.push(el.drop);
 				}
 			});
 			
@@ -210,31 +192,19 @@ async function TcNo_RDA_Fp(){
 			style.sheet.insertRule('.ProgressBar div{height: .25rem;background-color:#9147ff;}', 0);
 			style.sheet.insertRule('video{-webkit-box-shadow: 0px 0px 6px 3px rgba(0,0,0,0.75);-moz-box-shadow: 0px 0px 6px 3px rgba(0,0,0,0.75);box-shadow: 0px 0px 6px 3px rgba(0,0,0,0.75);}', 0);
 			
-			// rearrange:
-			var rowcount = 0;
-			[].forEach.call(document.getElementsByClassName("drop-container"), (row)=>{
-				for (let i=0; i < 4; i++){
-					//console.log(i);
-					if (rowcount < 4){
-						if (eIncomplete.length > 0){
-							//console.log(eIncomplete[0]);
-							row.appendChild(eIncomplete[0]);
-							eIncomplete.shift();
-						}else if (ePartial.length > 0){
-							//console.log(ePartial[0]);
-							row.appendChild(ePartial[0]);
-							ePartial.shift();
-						}else if (eComplete.length > 0){
-							//console.log(eComplete[0]);
-							row.appendChild(eComplete[0]);
-							eComplete.shift();
-						}
-					}
-					rowcount++;
-				}
-				rowcount = 0;
-			});
-			
+			var streamer_drops = document.getElementsByClassName("streamer-drops")[0].getElementsByClassName("drops-group")[0];
+			var categoryItems = streamer_drops.querySelectorAll("[progress]");
+			var categoryItemsArray = Array.from(categoryItems);
+
+			function sorter(a,b) {
+				if(parseInt(a.getAttribute("progress")) < parseInt(b.getAttribute("progress"))) return -1;
+				if(parseInt(a.getAttribute("progress")) > parseInt(b.getAttribute("progress"))) return 1;
+				return 0;
+			}
+			let sorted = categoryItemsArray.sort(sorter);
+
+			sorted.forEach(e => streamer_drops.appendChild(e));
+
 			
 			init_timeout = 10;
 		}catch(e){
