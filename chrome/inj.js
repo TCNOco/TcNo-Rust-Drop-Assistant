@@ -2,7 +2,7 @@
 /*Other versions:
 	Chrome Web Store: https://chrome.google.com/webstore/detail/tcno-rust-twitch-drop-ass/hflmhkgipblnfcplmdlkcknmenjmnedp
 	Firefox Add-ons: https://addons.mozilla.org/en-US/firefox/addon/tcno-rda/
-	Opera Addons: tbd
+	Opera Addons: https://addons.opera.com/en/extensions/details/tcno-rust-drop-assistant/
 
 Developed by: Wesley Pyburn
 Bug reports and business enquiries: TechNobo@tcno.co
