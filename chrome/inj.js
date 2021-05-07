@@ -1,7 +1,8 @@
 //CHROME VERSION
-/*Other versions:"
-	Chrome Web Store: https://chrome.google.com/webstore/detail/tbd
-	Firefox Add-ons: https://addons.mozilla.org/en-US/firefox/addon/tbd
+/*Other versions:
+	Chrome Web Store: https://chrome.google.com/webstore/detail/tcno-rust-twitch-drop-ass/hflmhkgipblnfcplmdlkcknmenjmnedp
+	Firefox Add-ons: https://addons.mozilla.org/en-US/firefox/addon/tcno-rda/
+	Opera Addons: tbd
 
 Developed by: Wesley Pyburn
 Bug reports and business enquiries: TechNobo@tcno.co
@@ -60,7 +61,7 @@ function callSnackbar(text, length = 3000) {
 async function TcNo_RDA_Twitch(){
 	var init_timeout = 0;
 	var claimedItems = []; 
-	if (window.location.href.indexOf("TcNo_update" > -1))callSnackbar("Tab closing after item collection");
+	if (window.location.href.indexOf("TcNo_update") > -1) callSnackbar("Tab closing after item collection");
 	while (init_timeout < 10){
 		try{
 			var claimedItemList = document.querySelector('[data-test-selector=drops-list__wrapper]').getElementsByClassName("tw-tower")[0];
@@ -91,7 +92,7 @@ async function TcNo_RDA_Twitch(){
 			callSnackbar("Saved claimed items");
 			init_timeout = 10; // Success
 			
-			if (window.location.href.indexOf("TcNo_update" > -1))window.close();
+			if (window.location.href.indexOf("TcNo_update") > -1) window.close();
 		}catch (er){
 			init_timeout++;
 			await new Promise(r => setTimeout(r, 2000));
