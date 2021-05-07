@@ -24,6 +24,8 @@
 <p align="center"><a target="_blank" href="https://chrome.google.com/webstore/detail/tcno-rust-twitch-drop-ass/hflmhkgipblnfcplmdlkcknmenjmnedp">
   <img alt="Download button" src="/img/btnDownloadChrome.png" height=70"></a><a target="_blank" href="https://addons.mozilla.org/en-US/firefox/addon/tcno-rda/">
   <img alt="Download button" src="/img/btnDownloadFirefox.png" height=70"></a></p>
+ <p align="center"><a target="_blank" href="https://addons.opera.com/en/extensions/details/tcno-rust-drop-assistant/">
+  <img alt="Download button" src="/img/btnOpera.png" height=70"></a></p>
 
 
 Small open-source extension, extension to extend Twitch Drop and Rust (Facepunch) functionality.
