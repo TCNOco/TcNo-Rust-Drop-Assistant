@@ -36,7 +36,7 @@ function addStylesheet(){
 	var css = document.createElement('style'); 
 	css.type = 'text/css'; 
   
-	var snackbar_styles =`#snackbar{visibility:hidden;min-width:250px;background-color:#230B16;color:#fff;text-align:center;border:solid 4px #DE2A2A;padding:16px;position:fixed;z-index:1;left:50%;transform:translateX(-50%);bottom:30px;-webkit-box-shadow: 0px 0px 20px 5px #230B16;-moz-box-shadow: 0px 0px 20px 5px #230B16;box-shadow: 0px 0px 20px 5px #230B16;}#snackbar.show{visibility:visible;-webkit-animation:fadein 0.5s,fadeout .5s 2.5s;animation:fadein 0.5s}#snackbar.fadeout{bottom:0;opacity:0;animation:fadeout .5s 0s}@-webkit-keyframes fadein{from{bottom:0;opacity:0}to{bottom:30px;opacity:1}}@keyframes fadein{from{bottom:0;opacity:0}to{bottom:30px;opacity:1}}@-webkit-keyframes fadeout{from{bottom:30px;opacity:1}to{bottom:0;opacity:0}}@keyframes fadeout{from{bottom:30px;opacity:1}to{bottom:0;opacity:0}}#snackbar h1{color:#9146ff;font-size:2em}#snackbar span{color:#efebe0;font-size:1.3em}#snackbar a{color:#aa4734!important;font-size:1.5em;text-decoration:underline}`;
+	var snackbar_styles =`#snackbar{z-index: 500;visibility:hidden;min-width:250px;background-color:#230B16;color:#fff;text-align:center;border:solid 4px #DE2A2A;padding:16px;position:fixed;z-index:1;left:50%;transform:translateX(-50%);bottom:30px;-webkit-box-shadow: 0px 0px 20px 5px #230B16;-moz-box-shadow: 0px 0px 20px 5px #230B16;box-shadow: 0px 0px 20px 5px #230B16;}#snackbar.show{visibility:visible;-webkit-animation:fadein 0.5s,fadeout .5s 2.5s;animation:fadein 0.5s}#snackbar.fadeout{bottom:0;opacity:0;animation:fadeout .5s 0s}@-webkit-keyframes fadein{from{bottom:0;opacity:0}to{bottom:30px;opacity:1}}@keyframes fadein{from{bottom:0;opacity:0}to{bottom:30px;opacity:1}}@-webkit-keyframes fadeout{from{bottom:30px;opacity:1}to{bottom:0;opacity:0}}@keyframes fadeout{from{bottom:30px;opacity:1}to{bottom:0;opacity:0}}#snackbar h1{color:#9146ff;font-size:2em}#snackbar span{color:#efebe0;font-size:1.3em}#snackbar a{color:#aa4734!important;font-size:1.5em;text-decoration:underline}`;
 	
 	if (css.styleSheet)  
 		css.styleSheet.cssText = snackbar_styles;
@@ -64,34 +64,28 @@ async function TcNo_RDA_Twitch(){
 	if (window.location.href.indexOf("TcNo_update") > -1) callSnackbar("Tab closing after item collection");
 	while (init_timeout < 10){
 		try{
-			var claimedItemList = document.querySelector('[data-test-selector=drops-list__wrapper]').getElementsByClassName("tw-tower")[0];
-			[].forEach.call(claimedItemList.querySelectorAll('.tw-semibold'), (el)=>{claimedItems.push(escape(el.innerHTML.toLowerCase().split(" ")[0]))});
-			if (claimedItems.length <= 1)throw '';
-			
+			console.log("Getting claimed items");
+			for (i of document.querySelector('[data-test-selector=drops-list__wrapper]').getElementsByClassName("tw-tower")[0].children)
+				if (i.classList[0].indexOf("Placeholder") == -1)
+                    claimedItems.push(escape(i.getElementsByTagName("p")[1].innerHTML.toLowerCase().split(" ")[0]));
 			
 			// Get progress
-			var progressItemList = document.querySelector('[data-test-selector=DropsCampaignsInProgressPresentation-main-layout]').getElementsByClassName("tw-mg-t-2");
-			[].forEach.call(progressItemList, (el)=>{
+			let elm = document.querySelectorAll('[data-test-selector="DropsCampaignInProgressRewards-container"]');
+			for (let i = 0; i < elm.length; i++){
+				let el = elm[i];
 				if (el.querySelector('[data-test-selector=DropsCampaignInProgressRewardPresentation-claim-button]') !== null){ // THIS ITEM HAS A CLAIM Button
-					//console.log(escape(el.querySelectorAll('.tw-semibold')[0].innerHTML.toLowerCase()) + "||100"); // Eg. buddha%20mask||100 == Claim button visible
-					claimedItems.push(escape(el.querySelectorAll('.tw-semibold')[0].innerHTML.toLowerCase().split(" ")[0]) + "||100"); // Eg. buddha%20mask||100 == Claim button visible
+					claimedItems.push(escape(el.querySelectorAll('p')[0].innerHTML.toLowerCase().split(" ")[0]) + "||100"); // Eg. buddha%20mask||100 == Claim button visible
 				}else if (el.querySelector('[role=progressbar]') !== null){
 					var val = el.querySelector('[role=progressbar]').attributes["aria-valuenow"].value;
-					if (val != 0){
-					//console.log(escape(el.querySelectorAll('.tw-semibold')[0].innerHTML.toLowerCase()) + "||" + el.querySelector('[role=progressbar]').attributes["aria-valuenow"].value);
-					claimedItems.push(escape(el.querySelectorAll('.tw-semibold')[0].innerHTML.toLowerCase().split(" ")[0]) + "||" + el.querySelector('[role=progressbar]').attributes["aria-valuenow"].value);
-					}
+					if (val != 0)
+						claimedItems.push(escape(el.querySelectorAll('p')[0].innerHTML.toLowerCase().split(" ")[0]) + "||" + val);
 				}
-			});
-			
+			}
 			
 			await storageProtocol.storage.local.set({claimedItems: claimedItems.join(","), lastChecked: new Date().toString()});
-			console.log("Saved info to claimedItems in chrome.storage.local");
-			//console.log(claimedItems);
-			
+			console.log("Saved info to claimedItems in chrome.storage.local");			
 			callSnackbar("Saved claimed items");
 			init_timeout = 10; // Success
-			
 			if (window.location.href.indexOf("TcNo_update") > -1) window.close();
 		}catch (er){
 			init_timeout++;

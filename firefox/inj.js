@@ -64,26 +64,23 @@ async function TcNo_RDA_Twitch(){
 	if (window.location.href.indexOf("TcNo_update") > -1) callSnackbar("Tab closing after item collection");
 	while (init_timeout < 10){
 		try{
-			var claimedItemList = document.querySelector('[data-test-selector=drops-list__wrapper]').getElementsByClassName("tw-tower")[0];
-			[].forEach.call(claimedItemList.querySelectorAll('.tw-semibold'), (el)=>{claimedItems.push(escape(el.innerHTML.toLowerCase().split(" ")[0]))});
-			if (claimedItems.length <= 1)throw '';
-			
+			console.log("Getting claimed items");
+			for (i of document.querySelector('[data-test-selector=drops-list__wrapper]').getElementsByClassName("tw-tower")[0].children)
+				if (i.classList[0].indexOf("Placeholder") == -1)
+                    claimedItems.push(escape(i.getElementsByTagName("p")[1].innerHTML.toLowerCase().split(" ")[0]));
 			
 			// Get progress
-			var progressItemList = document.querySelector('[data-test-selector=DropsCampaignsInProgressPresentation-main-layout]').getElementsByClassName("tw-mg-t-2");
-			[].forEach.call(progressItemList, (el)=>{
+			let elm = document.querySelectorAll('[data-test-selector="DropsCampaignInProgressRewards-container"]');
+			for (let i = 0; i < elm.length; i++){
+				let el = elm[i];
 				if (el.querySelector('[data-test-selector=DropsCampaignInProgressRewardPresentation-claim-button]') !== null){ // THIS ITEM HAS A CLAIM Button
-					//console.log(escape(el.querySelectorAll('.tw-semibold')[0].innerHTML.toLowerCase()) + "||100"); // Eg. buddha%20mask||100 == Claim button visible
-					claimedItems.push(escape(el.querySelectorAll('.tw-semibold')[0].innerHTML.toLowerCase().split(" ")[0]) + "||100"); // Eg. buddha%20mask||100 == Claim button visible
+					claimedItems.push(escape(el.querySelectorAll('p')[0].innerHTML.toLowerCase().split(" ")[0]) + "||100"); // Eg. buddha%20mask||100 == Claim button visible
 				}else if (el.querySelector('[role=progressbar]') !== null){
 					var val = el.querySelector('[role=progressbar]').attributes["aria-valuenow"].value;
-					if (val != 0){
-					//console.log(escape(el.querySelectorAll('.tw-semibold')[0].innerHTML.toLowerCase()) + "||" + el.querySelector('[role=progressbar]').attributes["aria-valuenow"].value);
-					claimedItems.push(escape(el.querySelectorAll('.tw-semibold')[0].innerHTML.toLowerCase().split(" ")[0]) + "||" + el.querySelector('[role=progressbar]').attributes["aria-valuenow"].value);
-					}
+					if (val != 0)
+						claimedItems.push(escape(el.querySelectorAll('p')[0].innerHTML.toLowerCase().split(" ")[0]) + "||" + val);
 				}
-			});
-			
+			}			
 			
 			await storageProtocol.storage.local.set({claimedItems: claimedItems.join(","), lastChecked: new Date().toString()});
 			console.log("Saved info to claimedItems in chrome.storage.local");
