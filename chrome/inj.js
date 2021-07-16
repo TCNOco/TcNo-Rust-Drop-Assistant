@@ -3,6 +3,7 @@
 	Chrome Web Store: https://chrome.google.com/webstore/detail/tcno-rust-twitch-drop-ass/hflmhkgipblnfcplmdlkcknmenjmnedp
 	Firefox Add-ons: https://addons.mozilla.org/en-US/firefox/addon/tcno-rda/
 	Opera Addons: https://addons.opera.com/en/extensions/details/tcno-rust-drop-assistant/
+	Edge Addons: https://microsoftedge.microsoft.com/addons/detail/clmoikdedmelmfjknlmcmmafiinmdgao
 
 Developed by: Wesley Pyburn
 Bug reports and business enquiries: TechNobo@tcno.co
@@ -36,7 +37,7 @@ function addStylesheet(){
 	var css = document.createElement('style'); 
 	css.type = 'text/css'; 
   
-	var snackbar_styles =`#snackbar{z-index: 500;visibility:hidden;min-width:250px;background-color:#230B16;color:#fff;text-align:center;border:solid 4px #DE2A2A;padding:16px;position:fixed;z-index:1;left:50%;transform:translateX(-50%);bottom:30px;-webkit-box-shadow: 0px 0px 20px 5px #230B16;-moz-box-shadow: 0px 0px 20px 5px #230B16;box-shadow: 0px 0px 20px 5px #230B16;}#snackbar.show{visibility:visible;-webkit-animation:fadein 0.5s,fadeout .5s 2.5s;animation:fadein 0.5s}#snackbar.fadeout{bottom:0;opacity:0;animation:fadeout .5s 0s}@-webkit-keyframes fadein{from{bottom:0;opacity:0}to{bottom:30px;opacity:1}}@keyframes fadein{from{bottom:0;opacity:0}to{bottom:30px;opacity:1}}@-webkit-keyframes fadeout{from{bottom:30px;opacity:1}to{bottom:0;opacity:0}}@keyframes fadeout{from{bottom:30px;opacity:1}to{bottom:0;opacity:0}}#snackbar h1{color:#9146ff;font-size:2em}#snackbar span{color:#efebe0;font-size:1.3em}#snackbar a{color:#aa4734!important;font-size:1.5em;text-decoration:underline}`;
+	var snackbar_styles =`#snackbar{z-index: 50;visibility:hidden;min-width:250px;background-color:#230B16;color:#fff;text-align:center;border:solid 4px #DE2A2A;padding:16px;position:fixed;left:50%;transform:translateX(-50%);bottom:30px;-webkit-box-shadow: 0px 0px 20px 5px #230B16;-moz-box-shadow: 0px 0px 20px 5px #230B16;box-shadow: 0px 0px 20px 5px #230B16;}#snackbar.show{visibility:visible;-webkit-animation:fadein 0.5s,fadeout .5s 2.5s;animation:fadein 0.5s}#snackbar.fadeout{bottom:0;opacity:0;animation:fadeout .5s 0s}@-webkit-keyframes fadein{from{bottom:0;opacity:0}to{bottom:30px;opacity:1}}@keyframes fadein{from{bottom:0;opacity:0}to{bottom:30px;opacity:1}}@-webkit-keyframes fadeout{from{bottom:30px;opacity:1}to{bottom:0;opacity:0}}@keyframes fadeout{from{bottom:30px;opacity:1}to{bottom:0;opacity:0}}#snackbar h1{color:#9146ff;font-size:2em}#snackbar span{color:#efebe0;font-size:1.3em}#snackbar a{color:#aa4734!important;font-size:1.5em;text-decoration:underline}`;
 	
 	if (css.styleSheet)  
 		css.styleSheet.cssText = snackbar_styles;
@@ -59,6 +60,8 @@ function callSnackbar(text, length = 3000) {
 }
 
 async function TcNo_RDA_Twitch(){
+	let monthsText = ["months", "måneder", "Monaten", "meses", "mois", "mesi", "hónappal", "maanden", "miesiące", "luni", "mesiacmi", "kuukautta", "månader", "tháng", " ay ", "měsíci", "месеца", "μήνες", "месяца", "เดือน", "个月", "個月", "か月", "개월"];
+	let isAMonth = false;
 	var init_timeout = 0;
 	var claimedItems = []; 
 	if (window.location.href.indexOf("TcNo_update") > -1) callSnackbar("Tab closing after item collection");
@@ -66,8 +69,15 @@ async function TcNo_RDA_Twitch(){
 		try{
 			console.log("Getting claimed items");
 			for (i of document.querySelector('[data-test-selector=drops-list__wrapper]').getElementsByClassName("tw-tower")[0].children)
-				if (i.classList[0].indexOf("Placeholder") == -1)
+				if (i.classList[0].indexOf("Placeholder") == -1){
+					// check to see if not older than a month -- not dropping anymore. To prevent duplicates.
+					isAMonth = false;
+					monthsText.forEach(m => {
+						if (i.getElementsByTagName("p")[0].innerHTML.includes(m)) isAMonth = true;
+					});
+					if (isAMonth) break; // No further items will be newer.
                     claimedItems.push(escape(i.getElementsByTagName("p")[1].innerHTML.toLowerCase().split(" ")[0]));
+				}
 			
 			// Get progress
 			let elm = document.querySelectorAll('[data-test-selector="DropsCampaignInProgressRewards-container"]');
