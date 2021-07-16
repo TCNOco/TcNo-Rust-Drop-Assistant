@@ -1,6 +1,3 @@
-
-
-
 <p align="center">
   <a href="https://tcno.co/">
     <img src="/img/banner.png"></a>
@@ -9,7 +6,9 @@
  <a href="https://chrome.google.com/webstore/detail/tcno-rust-twitch-drop-ass/hflmhkgipblnfcplmdlkcknmenjmnedp">
     <img alt="Chrome Web Store" src="https://img.shields.io/chrome-web-store/users/hflmhkgipblnfcplmdlkcknmenjmnedp?logo=google%20chrome&logoColor=white&style=flat-square"></a>
  <a href="https://addons.mozilla.org/en-US/firefox/addon/tcno-rda/">
-    <img alt="Mozilla Add-on" src="https://img.shields.io/amo/users/tcno-rda?logo=firefox%20browser&style=flat-square"></a>
+    <img alt="Mozilla Add-on" src="https://img.shields.io/amo/users/tcno-rda?logo=firefox%20browser&style=flat-square"></a
+ <a href="https://microsoftedge.microsoft.com/addons/detail/clmoikdedmelmfjknlmcmmafiinmdgao">
+    <img alt="Microsoft Edge Addon" src="https://img.shields.io/badge/Microsoft%20Edge-Addon-blue.svg?style=flat-square&logo=MicrosoftEdge"></a>
   <img alt="GitHub All Releases" src="https://img.shields.io/github/downloads/TcNobo/TcNo-Rust-Drop-Assistant/total?logo=GitHub&style=flat-square">
   <a href="https://tcno.co/">
     <img alt="Website" src="/img/web.svg" height=20"></a>
@@ -25,7 +24,8 @@
   <img alt="Download button" src="/img/btnDownloadChrome.png" height=70"></a><a target="_blank" href="https://addons.mozilla.org/en-US/firefox/addon/tcno-rda/">
   <img alt="Download button" src="/img/btnDownloadFirefox.png" height=70"></a></p>
  <p align="center"><a target="_blank" href="https://addons.opera.com/en/extensions/details/tcno-rust-drop-assistant/">
-  <img alt="Download button" src="/img/btnOpera.png" height=70"></a></p>
+  <img alt="Download button" src="/img/btnOpera.png" height=70"></a><a target="_blank" href="https://microsoftedge.microsoft.com/addons/detail/clmoikdedmelmfjknlmcmmafiinmdgao">
+  <img alt="Download button" src="/img/btnDownloadEdge.png" height=70"></a></p>
 
 
 Small open-source extension, extension to extend Twitch Drop and Rust (Facepunch) functionality.
