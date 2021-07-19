@@ -103,7 +103,7 @@ async function TcNo_RDA_Twitch(){
 		}
 	}
 }
-function getData_Chrome(sKey) {
+function getData(sKey) {
   return new Promise(function(resolve, reject) {
     storageProtocol.storage.local.get(sKey, function(items) {
       if (storageProtocol.runtime.lastError) {
@@ -131,10 +131,10 @@ toHHMMSS = function (seconds) {
 async function TcNo_RDA_Fp(){
 	var init_timeout = 0;
 	
-	claimedItems = await getData_Chrome('claimedItems');
+	claimedItems = await getData('claimedItems');
 	claimedItems = claimedItems.split(",");
 	var items_Progess = []; 
-	var lc = await getData_Chrome('lastChecked');
+	var lc = await getData('lastChecked');
 	//console.log("Last checked: " + lc);
 	
 	var lc_now = new Date().getTime();
@@ -144,7 +144,6 @@ async function TcNo_RDA_Fp(){
 	callSnackbar("Time since last check: " + timeSince+"<br><p style='margin:0;font-size:0.6em'>Last check: " + lc + "</p><a target='_blank' href='https://www.twitch.tv/drops/inventory?TcNo_update'>Update now</a>", 7500);
 	
 	// Move items with progress into a new list, clean it up for the next loop
-	//console.log(claimedItems);
 	for (i = 0; i < claimedItems.length; ++i) {
 		var claimedItem = claimedItems[i];
 		if (claimedItem.indexOf("||") != -1){items_Progess.push(claimedItem);}
@@ -158,17 +157,26 @@ async function TcNo_RDA_Fp(){
 			style.sheet.insertRule('.drop-footer{width: 100%;}', 0);
 			style.sheet.insertRule('.drop-footer .drop-time{width: 100%;text-align:center}', 0);
 			
-			[].forEach.call(document.getElementsByClassName("drop-name"), (el)=>{
+			let dropList = document.getElementsByClassName("drop-name");
+			await storageProtocol.storage.local.set({totalDrops: dropList.length});
+
+			[].forEach.call(dropList, (el)=>{
 				el.parentElement.parentElement.setAttribute("progress","0");
-				
 				
 				var currentItemName = escape(el.innerHTML.toLowerCase().split(" ")[0]); // Take only the first word
 				var drop_footer = el.parentElement;
 				var drop = drop_footer.parentElement;
-				var drop_table_section = drop_footer.parentElement.parentElement.parentElement.parentElement;
 				drop.setAttribute("style", "margin-bottom: 32px;");
 				
-				if (claimedItems.includes(currentItemName)){ // Element is an item that has been recieved.
+				var containsItem = false;
+				for (let ci of claimedItems) {
+					if (currentItemName == ci || currentItemName.startsWith(ci) || currentItemName.endsWith(ci)){
+						containsItem = true;
+						break;
+					}
+				};
+
+				if (containsItem){ // Element is an item that has been recieved.
 					drop.setAttribute("style", "background-color:#090E00;outline-offset: -6px;outline:solid 1px #718F41;padding:16px;margin-bottom: 32px;");
 					el.parentElement.parentElement.setAttribute("progress",101);
 											
